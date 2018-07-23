@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/x/web/LIVE/switchmerchesolnsserv/logs/switchmerchesolnsserv.log</file>
+        <rollingPolicy class="com.payment.csl.library.utilities.SwitchFixedWindowRollingPolicy">
+            <fileNamePattern>/x/web/LIVE/switchmerchesolnsserv/logs/switchmerchesolnsserv-%i.log.zip</fileNamePattern>
+			<minIndex>1</minIndex>
+			<maxIndex>50</maxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>10MB</maxFileSize>
+		</triggeringPolicy>
+		<encoder>
+			<pattern>%d{ISO8601} [%thread] %-5level %logger{5} - %msg%n</pattern>
+			<!-- this improves logging throughput -->
+			<immediateFlush>true</immediateFlush>
+		</encoder>
+	</appender>
+
+	<!-- <appender name="PPMETRICSLOGGER" class="com.payment.payments.logback.cal30.CAL30Appender">
+	    <encoder>
+	        <pattern>%d{HH:mm:ss.SSS} [%thread] %level %logger %msg%n</pattern>
+	    </encoder>
+    </appender> -->
+    
+     <appender name="CAL" class="com.payment.payments.logback.cal.CALAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %level %logger %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger
+		name="com.payment.pps.monitoring.businessmetrics.BusinessMetricsLoggerFactory"
+		level="info">
+		<appender-ref ref="CAL" />
+	</logger>
+
+	<logger name="com.payment.csl.client.translation.BaseMessageWrapper"
+		level="INFO" />
+	<logger name="com.payment.csl.client.translation.MessageWrapper"
+		level="INFO" />
+	<logger
+		name="com.payment.csl.client.messagetranslation.configuration.EnumValueMapper"
+		level="INFO" />
+	<logger
+		name="com.payment.csl.client.processor.iso8583.ProcessorPrivateFieldPackager"
+		level="INFO" />
+	<logger
+		name="com.payment.csl.client.messagetranslation.mapping.JsonConfigDataMap"
+		level="INFO" />
+	<logger name="com.payment.csl" level="INFO" />
+	<logger name="com.payment.pps.monitoring.businessmetrics" level="INFO" />
+	<logger name="org.apache.activemq" level="INFO"/>
+	<root level="INFO">
+		<appender-ref ref="FILE" />
+	</root>
+
+	<!-- fix java.lang.ClassCircularityError -->
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+		<resetJUL>true</resetJUL>
+	</contextListener>
+</configuration>
