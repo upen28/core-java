@@ -1,6 +1,6 @@
 
 
-package com.payment.security;
+package com.payment.security.keystore;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;

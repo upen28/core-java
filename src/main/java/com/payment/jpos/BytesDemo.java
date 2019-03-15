@@ -1,13 +1,23 @@
 
-
 package com.payment.jpos;
 
 import org.jpos.iso.ISOUtil;
 
-
 public class BytesDemo {
 	public static void main(String[] args) throws Exception {
+		tTwoByte();
+	}
 
+	public static void tTwoByte() {
+
+		byte[] by = new byte[2];
+
+		by[0] = 05;
+		by[1] = 0x5A;
+
+		int twoByte = (by[0] & 0xFF) << 8 | by[1] & 0xFF;
+		System.out.println(twoByte);
+		printInt(twoByte);
 	}
 
 	public static void toTwoByte() {
@@ -20,7 +30,7 @@ public class BytesDemo {
 		by[1] = (byte) (length);
 
 		System.out.println(ISOUtil.hexdump(by));
-
+		
 		int twoByte = (by[0] & 0xFF) << 8 | by[1] & 0xFF;
 		printInt(twoByte);
 	}
@@ -49,8 +59,7 @@ public class BytesDemo {
 			int masking = k << i;
 			if ((b & masking) == masking) {
 				System.out.print("1");
-			}
-			else {
+			} else {
 				System.out.print("0");
 			}
 		}
@@ -63,8 +72,7 @@ public class BytesDemo {
 			int masking = k << i;
 			if ((b & masking) == masking) {
 				System.out.print("1");
-			}
-			else {
+			} else {
 				System.out.print("0");
 			}
 			if (i != 32 & i % 8 == 0) {

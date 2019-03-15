@@ -11,6 +11,7 @@
 .idea/
 *.iml
 
+.gradle/
 dist
 build
 bin

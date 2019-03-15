@@ -1,4 +1,0 @@
-SendBufferSize: 512000
-Environment: paypal
-PoolName: switchmerchesolnsserv
-SiteViewAddr: mscal.qa.paypal.com

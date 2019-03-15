@@ -1,0 +1,1 @@
+keytool -genkeypair -alias reno-upen -keyalg RSA -keysize 2048 -keypass welcome-key -validity 100 -storetype JKS -keystore keystore.jks -storepass welcome
