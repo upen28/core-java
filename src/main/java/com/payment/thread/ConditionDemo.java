@@ -1,5 +1,4 @@
 
-
 package com.payment.thread;
 
 import java.util.concurrent.ExecutorService;
@@ -7,7 +6,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
 
 public class ConditionDemo {
 	Lock lock = new ReentrantLock();
@@ -19,19 +17,11 @@ public class ConditionDemo {
 		Runnable runnable = () -> {
 			try {
 				lock.lock();
-				while (response != true) {
-					try {
-						System.out.println("Awaiting.......");
-						awake.await();
-						System.out.println("After Awaiting.......");
-					}
-					catch (InterruptedException e) {
-
-					}
-				}
-				System.out.println("Response Recieved " + response);
-			}
-			finally {
+				System.out.println("Awaiting.......");
+				while (response != true)
+					awake.await();
+			} catch (InterruptedException e) {
+			} finally {
 				lock.unlock();
 			}
 		};
@@ -41,23 +31,18 @@ public class ConditionDemo {
 				lock.lock();
 				response = true;
 				awake.signalAll();
-			}
-			finally {
+			} finally {
 				lock.unlock();
 			}
 		};
 
 		executor.submit(runnable);
-
 		try {
 			Thread.sleep(5000);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 
 		}
-
 		executor.submit(responseRunnable);
-
 		executor.shutdown();
 	}
 
