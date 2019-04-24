@@ -1,12 +1,10 @@
 
-
 package com.payment.datastructure;
 
 import java.util.concurrent.*;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
 
 public class BlockingQueueDemo<E> {
 
@@ -49,7 +47,6 @@ public class BlockingQueueDemo<E> {
 		E e = (E) items[takeIndex];
 		items[takeIndex] = null;
 		if (++takeIndex == elements.length)
-			
 			takeIndex = 0;
 		count--;
 		notFull.signalAll();
@@ -62,8 +59,7 @@ public class BlockingQueueDemo<E> {
 			while (elements.length == count)
 				notFull.await();
 			enqueue(e);
-		}
-		finally {
+		} finally {
 			lock.unlock();
 		}
 
@@ -76,8 +72,7 @@ public class BlockingQueueDemo<E> {
 				notEmpty.await();
 			return dequeue();
 
-		}
-		finally {
+		} finally {
 			lock.unlock();
 		}
 	}
@@ -99,8 +94,7 @@ public class BlockingQueueDemo<E> {
 					}
 					System.out.println();
 				}
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 
 			}
 		};
@@ -118,8 +112,7 @@ public class BlockingQueueDemo<E> {
 					}
 					System.out.println();
 				}
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 
 			}
 		};
