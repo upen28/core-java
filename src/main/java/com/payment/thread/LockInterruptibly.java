@@ -1,57 +1,40 @@
 
-
 package com.payment.thread;
 
 import java.util.concurrent.*;
 import java.util.concurrent.locks.*;
 
-
-class LockDemo {
+class LockInterruptibly {
 	static ReentrantLock lock = new ReentrantLock();
 	private static ExecutorService executor = Executors.newFixedThreadPool(2);
 
-	public LockDemo() {
+	LockInterruptibly() {
 		lock.lock();
-		System.out.println("Lock Acquired...");
 	}
 
 	public void doSomeWork() throws InterruptedException {
-		lock.lockInterruptibly();
 		try {
+			lock.lockInterruptibly();
 			System.out.println("Lock Acquired...");
-		}
-		catch (Exception ex) {
+			Thread.sleep(10000);
+		} catch (Exception ex) {
 			ex.printStackTrace();
-		}
-		finally {
+		} finally {
 			lock.unlock();
 		}
 
 	}
 
 	public static void main(String[] args) throws Exception {
-		LockDemo demo = new LockDemo();
-
+		LockInterruptibly demo = new LockInterruptibly();
 		executor.submit(() -> {
 			try {
 				demo.doSomeWork();
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			System.out.println(Thread.currentThread().getName());
 		});
-
-		Thread.sleep(20000);
-
-		/*if (lock.isLocked()) {
-			System.out.println("isLocked() is true");
-			try {
-			}
-			finally {
-				lock.unlock();
-			}
-		}*/
+		Thread.sleep(5000);
 		executor.shutdownNow();
 	}
 }
