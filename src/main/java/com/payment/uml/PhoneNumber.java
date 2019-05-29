@@ -1,5 +1,5 @@
 package com.payment.uml;
 
-public class PhoneNumber {
+class PhoneNumber {
 
 }

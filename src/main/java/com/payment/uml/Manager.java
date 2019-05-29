@@ -4,7 +4,7 @@ public class Manager extends Employee {
 
 	private double bonus;
 
-	public Manager(String name, double salary, int year, int month, int day) {
+	public Manager(String name, double salary, int year, int month, int day, PhoneNumber number) {
 		super(name, salary, year, month, day);
 	}
 
