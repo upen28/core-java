@@ -1,5 +1,4 @@
 
-
 package com.payment.jpos;
 
 import org.bouncycastle.util.encoders.Base64;
@@ -13,19 +12,24 @@ import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOUtil;
 import org.jpos.iso.packager.GenericPackager;
 
-
 public class JpsoRnd {
 
 	public static void testPakager() throws Exception {
-		GenericPackager packager = new GenericPackager("jar:worldpay2015binary.xml");
+		GenericPackager packager = new GenericPackager("jar:sms-packager.xml");
 
 		ISOMsg msg = new ISOMsg();
 		msg.setPackager(packager);
-
-		msg.set(0, "0800");
+		
+		msg.set(0,"0200");
+		ISOMsg inner= new ISOMsg(63); 
+        inner.set(1, "0002"); 
+        inner.set(11,"0");
+        inner.set(6,"7777777");
+       
+		msg.set(inner);
 
 		byte[] dst = msg.pack();
-
+		
 		System.out.println(ISOUtil.hexdump(dst));
 		msg.dump(System.out, "");
 
@@ -38,7 +42,7 @@ public class JpsoRnd {
 	}
 
 	public static void testPakager1() throws Exception {
-		GenericPackager packager = new GenericPackager("jar:worldpay2015binary.xml");
+		GenericPackager packager = new GenericPackager("jar:sms-packager.xml");
 
 		ISOMsg msg = new ISOMsg();
 		msg.setPackager(packager);
@@ -91,10 +95,9 @@ public class JpsoRnd {
 		System.out.println(ISOUtil.hexdump(dst2));
 
 	}
-	
 
 	public static void main(String... args) throws Exception {
 		System.out.println("starting &&&&&&& main");
-		testEbcdic();
+		testPakager();
 	}
 }

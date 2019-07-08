@@ -1,32 +1,36 @@
 
-
 package com.payment.netty.handlers;
 
-import java.nio.charset.Charset;
 import java.util.List;
-import java.util.stream.Stream;
+
+import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOUtil;
+import org.jpos.iso.packager.GenericPackager;
+
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-
 
 public class Decoder extends ByteToMessageDecoder {
 
 	@Override
-	protected void decode(ChannelHandlerContext paramChannelHandlerContext, ByteBuf byteBuf, List<Object> paramList) throws Exception {
-		System.out.println(this.getClass().getName());
+	protected void decode(ChannelHandlerContext paramChannelHandlerContext, ByteBuf byteBuf, List<Object> paramList)
+			throws Exception {
+		int tLen = byteBuf.readableBytes();
+		byteBuf.skipBytes(26);
+		System.out.println(hexDump(byteBuf));
+		GenericPackager packager = new GenericPackager("jar:sms-packager.xml");
 
-		if (byteBuf.readableBytes() < 14) {
-			return;
-		}
-		if (byteBuf.readableBytes() == 14) {
-			ByteBuf frame = Unpooled.directBuffer(byteBuf.readableBytes());
-			byteBuf.readBytes(frame);
-			paramList.add(frame);
-		}
+		ISOMsg isoMessage = new ISOMsg();
+		isoMessage.setDirection(1);
+		isoMessage.setPackager(packager);
 
+		byte[] messageBytes = new byte[tLen - 26];
+		byteBuf.readBytes(messageBytes);
+		System.out.println(hexDump(messageBytes));
+
+		isoMessage.unpack(messageBytes);
+		isoMessage.dump(System.out, "");
 	}
 
 	@Override
@@ -36,39 +40,14 @@ public class Decoder extends ByteToMessageDecoder {
 
 	}
 
-	public static void main(String... args) throws InterruptedException {
-		ByteBuf byteBuf = Unpooled.buffer(100);
+	public static String hexDump(ByteBuf buffer) {
+		byte[] dst = new byte[buffer.readableBytes()];
+		buffer.getBytes(0, dst);
+		return ISOUtil.hexdump(dst);
+	}
 
-		System.out.println(byteBuf.hasArray());
-
-		Stream.iterate(0, f -> f + 1).limit(100).forEach(no -> {
-			byteBuf.writeByte((byte) no.intValue());
-		});
-
-		ByteBuf readHalf = byteBuf.readBytes(50);
-
-		System.out.println(byteBuf.toString(Charset.defaultCharset()));
-
-		byte[] dst = new byte[100];
-
-		System.out.println(ISOUtil.hexdump(dst));
-
-		System.out.println(byteBuf.refCnt());
-
-		System.out.println(readHalf.refCnt());
-
-		byteBuf.release();
-
-		readHalf.release();
-
-		byteBuf.writeByte(12);
-
-		System.out.println(byteBuf.refCnt());
-
-		System.out.println(readHalf.refCnt());
-
-		Thread.sleep(60000);
-
+	public static String hexDump(byte[] buffer) {
+		return ISOUtil.hexdump(buffer);
 	}
 
 }
