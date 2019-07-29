@@ -6,6 +6,9 @@ import java.util.List;
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOUtil;
 import org.jpos.iso.packager.GenericPackager;
+import org.jpos.util.LogSource;
+import org.jpos.util.Logger;
+import org.jpos.util.SimpleLogListener;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -16,10 +19,14 @@ public class Decoder extends ByteToMessageDecoder {
 	@Override
 	protected void decode(ChannelHandlerContext paramChannelHandlerContext, ByteBuf byteBuf, List<Object> paramList)
 			throws Exception {
+
+		Logger logger = new Logger();
+		logger.addListener(new SimpleLogListener(System.out));
+
 		int tLen = byteBuf.readableBytes();
 		byteBuf.skipBytes(26);
-		System.out.println(hexDump(byteBuf));
 		GenericPackager packager = new GenericPackager("jar:sms-packager.xml");
+		((LogSource) packager).setLogger(logger, "debug");
 
 		ISOMsg isoMessage = new ISOMsg();
 		isoMessage.setDirection(1);
@@ -27,10 +34,9 @@ public class Decoder extends ByteToMessageDecoder {
 
 		byte[] messageBytes = new byte[tLen - 26];
 		byteBuf.readBytes(messageBytes);
+		isoMessage.unpack(messageBytes);
 		System.out.println(hexDump(messageBytes));
 
-		isoMessage.unpack(messageBytes);
-		isoMessage.dump(System.out, "");
 	}
 
 	@Override

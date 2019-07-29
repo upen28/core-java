@@ -3,6 +3,7 @@ package com.payment.netty.client;
 
 import java.io.FileInputStream;
 import java.security.KeyStore;
+import java.util.stream.Stream;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
@@ -24,10 +25,15 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.pool.ChannelHealthChecker;
+import io.netty.channel.pool.ChannelPoolHandler;
+import io.netty.channel.pool.FixedChannelPool;
+import io.netty.channel.pool.FixedChannelPool.AcquireTimeoutAction;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.ssl.SslHandler;
 import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 
 public class VtsClient {
 
@@ -95,11 +101,76 @@ public class VtsClient {
 		return sslHandler;
 	}
 
-	public void perform() throws Exception {
-		Channel channel = connect("10.0.75.1", 9999);
+	public void processTransaction() throws Exception {
+		Channel channel = connect("172.20.215.97", 9999);
 		ByteBuf buf = Unpooled.buffer();
 		buf.writeBytes(toVtsReq());
 		channel.writeAndFlush(buf);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void processTransactions() {
+		EventLoopGroup workerGroup = new NioEventLoopGroup(2);
+		Bootstrap bootStrap = new Bootstrap();
+		bootStrap.group(workerGroup);
+		bootStrap.channel(NioSocketChannel.class);
+		bootStrap.option(ChannelOption.SO_KEEPALIVE, true);
+		bootStrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 60000);
+		bootStrap.remoteAddress("172.20.215.97", 9999);
+		bootStrap.handler(new ChannelInitializer<SocketChannel>() {
+			@Override
+			public void initChannel(SocketChannel ch) throws Exception {
+				ch.pipeline().addLast(new Decoder());
+			}
+		});
+
+		ChannelPoolHandler cpH = new ChannelPoolHandler() {
+			@Override
+			public void channelReleased(Channel ch) throws Exception {
+				System.out.println("channelReleased" + ch.toString());
+				
+			}
+
+			@Override
+			public void channelAcquired(Channel ch) throws Exception {
+				System.out.println("channelAcquired" + ch.toString());
+			}
+
+			@Override
+			public void channelCreated(Channel ch) throws Exception {
+				System.out.println("channelCreated" + ch.toString());
+				ch.pipeline().addLast(new Decoder());
+			}
+		};
+
+		FixedChannelPool pool = new FixedChannelPool(bootStrap, cpH, ChannelHealthChecker.ACTIVE,
+				AcquireTimeoutAction.FAIL, 2000, 1, 5);
+		Stream.iterate(0, x -> x + 1).limit(6).forEach(dara -> {
+			Future<Channel> fChannel = null;
+			try {
+				fChannel = pool.acquire();
+				fChannel.addListener(new GenericFutureListener() {
+					@Override
+					public void operationComplete(Future future) throws Exception {
+						if (future.isSuccess()) {
+							ByteBuf buf = toVtsReq();
+							System.out.println("writing=======");
+							//pool.release((Channel) future.get());
+							((Channel) future.get()).writeAndFlush(buf);
+						} else {
+							System.out.println(future.cause());
+						}
+					}
+
+				});
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+
+			}
+		});
+
 	}
 
 	private ByteBuf toVtsReq() throws Exception {
@@ -176,7 +247,7 @@ public class VtsClient {
 
 	public static void main(String[] args) throws Exception {
 		VtsClient client = new VtsClient();
-		client.perform();
+		client.processTransactions();
 		Thread.sleep(5000);
 	}
 
