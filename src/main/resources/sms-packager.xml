@@ -61,9 +61,18 @@
    <isofield id="57" length="99" name="RESERVED NATIONAL" class="org.jpos.iso.IFB_LLHCHAR" />
    <isofield id="58" length="99" name="RESERVED NATIONAL" class="org.jpos.iso.IFB_LLHCHAR" />
    <isofield id="59" length="14" name="NATIONAL POS GEOGRAPHIC DATA" class="org.jpos.iso.IFB_LLHECHAR" />
-   <isofield id="60" length="6" name="RESERVED PRIVATE" class="org.jpos.iso.IFB_LLHBINARY" />
+  
+   <isofieldpackager id="60" name="ADDITIONAL POS INFO" length="14" class="org.jpos.iso.IFB_LLHBINARY" packager="org.jpos.iso.packager.GenericSubFieldPackager" emitBitmap="false">
+      <isofield id="1" length="2" name="Terminal Type" class="org.jpos.iso.IFB_NUMERIC" />
+      <isofield id="2" length="2" name="Chip Condition Codes" class="org.jpos.iso.IFB_NUMERIC" />
+      <isofield id="3" length="2" name="Chip Transaction Indicator" class="org.jpos.iso.IFB_NUMERIC" />
+      <isofield id="4" length="2" name="Mail/Phone/Electronic Commerce and Payment Indicator" class="org.jpos.iso.IFB_NUMERIC" />
+      <isofield id="5" length="2" name="Cardholder ID Method Indicator" class="org.jpos.iso.IFB_NUMERIC" />
+      <isofield id="6" length="2" name="Additional Authorization Indicators" class="org.jpos.iso.IFB_NUMERIC" />
+   </isofieldpackager> 
+  
    <isofield id="61" length="36" name="RESERVED PRIVATE" pad="true" class="org.jpos.iso.IFB_LLHNUM" />
-   
+  
    <isofieldpackager name="Custom Payment Service Fields" id="62" length="255" class="org.jpos.iso.IFB_LLHBINARY" packager="org.jpos.iso.packager.Base1SubFieldPackager">
       <isofield id="0" length="8" name="Bit Map" class="org.jpos.iso.IFB_BITMAP" />
       <isofield id="1" length="1" name="Authorization Characteristics Indicator" class="org.jpos.iso.IFE_CHAR" />
