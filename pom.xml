@@ -5,7 +5,6 @@
 	<groupId>core-java</groupId>
 	<artifactId>core-java</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -42,25 +41,6 @@
 			<artifactId>hystrix-core</artifactId>
 			<version>1.5.18</version>
 		</dependency>
-		
-		<!-- rpos dependency -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>2.9.6</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.9.6</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-			<version>2.9.6</version>
-		</dependency>
-		
-		
 	</dependencies>
 	<build>
 		<plugins>
@@ -73,5 +53,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

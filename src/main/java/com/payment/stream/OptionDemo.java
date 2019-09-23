@@ -1,9 +1,7 @@
 
-
 package com.payment.stream;
 
 import java.util.Optional;
-
 
 class Address {
 	private String city;
@@ -63,17 +61,30 @@ class Employer {
 }
 
 public class OptionDemo {
+
+	public static void checkBasicValidtaion(String opt) {
+		if (opt.length() != 7) {
+			throw new RuntimeException("invalid length required {} find  {} ");
+		}
+	}
+
 	public static void main(String... args) throws Exception {
 		Employer employer = new Employer();
+		Employee em = new Employee();
+		Address ad = new Address();
+		ad.setCity("roorke");
+		
+		em.setAdress(ad);
+		employer.setEmployee(em);
 		Optional<Employer> emp = Optional.of(employer);
 
-		String city = emp.map(item -> item.getEmployee()).map(item -> item.getAdress()).map(item -> item.getCity()).orElse(null);
-		if (city != null) {
-			System.out.println("city " + city);
-		}
-		else {
-			System.out.println("city is " + city);
-		}
-
+		emp.map(item -> item.getEmployee()).map(item -> item.getAdress()).map(item -> item.getCity())
+				.ifPresentOrElse(fld -> {
+					System.out.println("basic validation");
+					checkBasicValidtaion(fld);
+				}, () -> {
+					System.out.println("throwing runtime exception");
+					throw new RuntimeException("fld city is required");
+				});
 	}
 }
