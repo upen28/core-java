@@ -1,5 +1,4 @@
 
-
 package com.payment.security.keystore;
 
 import java.io.DataInputStream;
@@ -11,30 +10,29 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
-
 public class Client {
 
-	public static void main(String... args) throws Exception {
+    public static void main(String... args) throws Exception {
 
-		char[] passwd = "password".toCharArray();
+        char[] passwd = "password".toCharArray();
 
-		KeyStore ks = KeyStore.getInstance("JKS");
-		ks.load(new FileInputStream("C:/upendra/keystore.jks"), passwd);
+        KeyStore ks = KeyStore.getInstance("JKS");
+        ks.load(new FileInputStream("C:/upendra/keystore.jks"), passwd);
 
-		TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
-		tmf.init(ks);
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+        tmf.init(ks);
 
-		SSLContext ctx = SSLContext.getInstance("TLS");
-		ctx.init(null, tmf.getTrustManagers(), null);
+        SSLContext ctx = SSLContext.getInstance("TLS");
+        ctx.init(null, tmf.getTrustManagers(), null);
 
-		SSLSocketFactory sslFact = ctx.getSocketFactory();
-		SSLSocket s = (SSLSocket) sslFact.createSocket("localhost", 8080);
+        SSLSocketFactory sslFact = ctx.getSocketFactory();
+        SSLSocket s = (SSLSocket) sslFact.createSocket("localhost", 8080);
 
-		InputStream in = s.getInputStream();
-		DataInputStream dis = new DataInputStream(in);
+        InputStream in = s.getInputStream();
+        DataInputStream dis = new DataInputStream(in);
 
-		int secretNumber = dis.readInt();
-		System.out.println(secretNumber);
+        int secretNumber = dis.readInt();
+        System.out.println(secretNumber);
 
-	}
+    }
 }

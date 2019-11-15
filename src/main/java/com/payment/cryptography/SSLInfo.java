@@ -2,8 +2,8 @@ package com.payment.cryptography;
 
 public class SSLInfo {
 
-	/*
-
+    /*
+    
     SSL handshake protocol --- SSL cipher change protocol --- SSL alert protocol --Application protocol HTTP LDAP
     
     
@@ -17,32 +17,32 @@ public class SSLInfo {
     
     
     The Alert Protocol
-	
-	The Alert Protocol is used by parties to convey session messages associated with data exchange and functioning of the protocol. 
-	Each message in the alert protocol consists of two bytes. The first byte always takes a value, "warning" (1) or "fatal" (2) ,
+    
+    The Alert Protocol is used by parties to convey session messages associated with data exchange and functioning of the protocol. 
+    Each message in the alert protocol consists of two bytes. The first byte always takes a value, "warning" (1) or "fatal" (2) ,
     that determines the severity of the message sent. Sending a message having  a "fatal" status by either party will result in an immediate termination of the SSL session. 
     The next byte of the message contains one of the defined error codes, which may occur during an SSL communication session. 
-     
-     
-     
+    
+    
+    
     SSL Record protocol
-     
-     1 : Application Data
-     2 : fragmentation of application data
-     3 : compression of data
-     4 : data integrity of data (MAC)
-     5 : encryption of data
-	 6 : creating a header [ Content type(1 byte) define the higher level protocol . Major Version(1 byte) SSL major version . Minor Version(1 byte) SSL minor version. 
-	 						 Compressed length(2 byte) length of data ]
-	
-	TCP
+    
+    1 : Application Data
+    2 : fragmentation of application data
+    3 : compression of data
+    4 : data integrity of data (MAC)
+    5 : encryption of data
+     6 : creating a header [ Content type(1 byte) define the higher level protocol . Major Version(1 byte) SSL major version . Minor Version(1 byte) SSL minor version. 
+     						 Compressed length(2 byte) length of data ]
+    
+    TCP
     
     IP
-	 
-	 */
+     
+     */
 
-	public static void main(String... args) {
+    public static void main(String... args) {
 
-	}
+    }
 
 }

@@ -8,29 +8,29 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class AtomicDemo {
 
-	static AtomicReference<String> ar = new AtomicReference<String>("ref");
-	static ExecutorService executors = Executors.newCachedThreadPool();
+    static AtomicReference<String> ar = new AtomicReference<String>("ref");
+    static ExecutorService executors = Executors.newCachedThreadPool();
 
-	public static void main(String... args) {
+    public static void main(String... args) {
 
-		AtomicBoolean bol = new AtomicBoolean();
-		System.out.println(bol.get());
+        AtomicBoolean bol = new AtomicBoolean();
+        System.out.println(bol.get());
 
-		if (bol.compareAndSet(false, true)) {
-			System.out.println(bol.get());
-		}
+        if (bol.compareAndSet(false, true)) {
+            System.out.println(bol.get());
+        }
 
-		bol.set(false);
-		System.out.println(bol.get());
+        bol.set(false);
+        System.out.println(bol.get());
 
-		Runnable task = () -> {
-			System.out.println(Thread.currentThread().getName() + " " + ar.get());
-			boolean result = ar.compareAndSet("ref", "ref1");
-			System.out.println(Thread.currentThread().getName() + " " + result + " " + ar.get());
-		};
+        Runnable task = () -> {
+            System.out.println(Thread.currentThread().getName() + " " + ar.get());
+            boolean result = ar.compareAndSet("ref", "ref1");
+            System.out.println(Thread.currentThread().getName() + " " + result + " " + ar.get());
+        };
 
-		executors.submit(task);
-		executors.submit(task);
+        executors.submit(task);
+        executors.submit(task);
 
-	}
+    }
 }
