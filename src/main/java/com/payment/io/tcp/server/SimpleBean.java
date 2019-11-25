@@ -4,7 +4,7 @@
  *
  *******************************************************************************/
 
-package com.revovite.io.tcp.server;
+package com.payment.io.tcp.server;
 
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.BeanNameAware;
