@@ -1,6 +1,9 @@
 
 package com.payment.netty.client;
 
+import java.util.Iterator;
+import java.util.Map.Entry;
+
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOUtil;
 import org.jpos.iso.packager.GenericPackager;
@@ -8,13 +11,17 @@ import org.jpos.util.LogSource;
 import org.jpos.util.Logger;
 import org.jpos.util.SimpleLogListener;
 
+import com.payment.netty.handlers.ExceptionalHandler;
 import com.payment.netty.handlers.PostilionDecoder;
+import com.payment.netty.handlers.RequestHandler;
+import com.payment.netty.handlers.RequestHandler2;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -37,7 +44,15 @@ public class PostilionClient {
             bootStrap.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 public void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(new PostilionDecoder());
+                    ch.pipeline().addFirst(new PostilionDecoder());
+                    ch.pipeline().addFirst(new RequestHandler());
+                    ch.pipeline().addFirst(new RequestHandler2());
+                    ch.pipeline().addLast(new ExceptionalHandler());
+                    Iterator<Entry<String, ChannelHandler>> it = ch.pipeline().iterator();
+                    while (it.hasNext()) {
+                        Entry<String, ChannelHandler> entry = it.next();
+                        System.out.println(entry.getKey() + " " + entry.getValue());
+                    }
                 }
             });
             ChannelFuture connectFuture = bootStrap.connect(ip, port);

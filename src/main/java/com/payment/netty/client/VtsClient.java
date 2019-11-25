@@ -14,7 +14,7 @@ import org.jpos.iso.ISOUtil;
 import org.jpos.iso.header.BASE1Header;
 import org.jpos.iso.packager.GenericPackager;
 
-import com.payment.netty.handlers.Decoder;
+import com.payment.netty.handlers.VtsDecoder;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -50,7 +50,7 @@ public class VtsClient {
             bootStrap.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 public void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(new Decoder());
+                    ch.pipeline().addLast(new VtsDecoder());
                 }
             });
             ChannelFuture connectFuture = bootStrap.connect(ip, port);
@@ -120,7 +120,7 @@ public class VtsClient {
         bootStrap.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             public void initChannel(SocketChannel ch) throws Exception {
-                ch.pipeline().addLast(new Decoder());
+                ch.pipeline().addLast(new VtsDecoder());
             }
         });
 
@@ -139,7 +139,7 @@ public class VtsClient {
             @Override
             public void channelCreated(Channel ch) throws Exception {
                 System.out.println("channelCreated" + ch.toString());
-                ch.pipeline().addLast(new Decoder());
+                ch.pipeline().addLast(new VtsDecoder());
             }
         };
 

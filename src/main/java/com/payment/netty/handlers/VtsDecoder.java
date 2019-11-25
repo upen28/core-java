@@ -14,7 +14,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
-public class Decoder extends ByteToMessageDecoder {
+public class VtsDecoder extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext paramChannelHandlerContext, ByteBuf byteBuf, List<Object> paramList)
