@@ -49,6 +49,18 @@ public class ByteBufDemo {
             System.out.println(index);
         }
     }
+    
+    public static void testReferenceUtil() {
+		ByteBuf buf = Unpooled.buffer();
+		buf.writeByte(10);
+		System.out.println(buf.refCnt());
+
+		boolean release = buf.release();
+		System.out.println(release);
+		System.out.println(buf.refCnt());
+
+		buf.writeBoolean(Boolean.TRUE);
+	}
 
     public static void main(String... args) {
         testEmptyByteBuf();
