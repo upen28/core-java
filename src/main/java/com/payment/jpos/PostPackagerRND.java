@@ -5,9 +5,9 @@ import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOUtil;
 import org.jpos.iso.packager.GenericPackager;
 
-public class PostPackgerRND {
+public class PostPackagerRND {
 
-	public static void test0100Req() throws Exception {
+	public static ISOMsg test0100Req() throws Exception {
 		ISOMsg msg = new ISOMsg();
 		// Logger logger = new Logger();
 		// logger.addListener(new SimpleLogListener(System.out));
@@ -73,12 +73,11 @@ public class PostPackgerRND {
 		_1271_25Msg.set(29, "00");
 		_1271_25Msg.set(30, "C5240879");
 
-		System.out.println(ISOUtil.hexdump(msg.pack()));
 		msg.dump(System.out, "");
-
+		return msg;
 	}
 
-	public static void test0100Res() throws Exception {
+	public static ISOMsg test0100Res() throws Exception {
 		ISOMsg msg = new ISOMsg();
 		// Logger logger = new Logger();
 		// logger.addListener(new SimpleLogListener(System.out));
@@ -129,9 +128,8 @@ public class PostPackgerRND {
 		_127Msg.set(_1271_25Msg);
 		_1271_25Msg.set(31, "8323708DAB52AF473030");
 
-		System.out.println(ISOUtil.hexdump(msg.pack()));
 		msg.dump(System.out, "");
-
+		return msg;
 	}
 
 	public static void test0220Req() throws Exception {

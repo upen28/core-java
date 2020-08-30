@@ -14,7 +14,7 @@ import org.jpos.iso.ISOUtil;
 import org.jpos.iso.header.BASE1Header;
 import org.jpos.iso.packager.GenericPackager;
 
-import com.payment.netty.handlers.VtsDecoder;
+import com.payment.netty.testing.handlers.VtsDecoder;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
