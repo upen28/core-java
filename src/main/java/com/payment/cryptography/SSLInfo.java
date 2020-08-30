@@ -32,7 +32,7 @@ public class SSLInfo {
     3 : compression of data
     4 : data integrity of data (MAC)
     5 : encryption of data
-     6 : creating a header [ Content type(1 byte) define the higher level protocol . Major Version(1 byte) SSL major version . Minor Version(1 byte) SSL minor version. 
+    6 : creating a header [ Content type(1 byte) define the higher level protocol . Major Version(1 byte) SSL major version . Minor Version(1 byte) SSL minor version. 
      						 Compressed length(2 byte) length of data ]
     
     TCP
