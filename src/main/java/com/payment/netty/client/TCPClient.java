@@ -21,7 +21,7 @@ public class TCPClient {
 
 	public void processTransaction(ByteBuf buf) {
 		try {
-			//System.out.println(id + " " + lock.isLocked());
+			System.out.println(id + " " + lock.isLocked());
 			lock.lock();
 			Channel channel = pool.acquire().syncUninterruptibly().getNow();
 			CompletableFuture<Boolean> event = new CompletableFuture<>();

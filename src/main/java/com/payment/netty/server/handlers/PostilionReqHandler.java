@@ -42,6 +42,7 @@ public class PostilionReqHandler extends ChannelInboundHandlerAdapter {
 		resByteBuf.writeByte(msgLen >> 8);
 		resByteBuf.writeByte(msgLen);
 		resByteBuf.writeBytes(resIsoMsg);
+		Thread.sleep(1500);
 
 		ChannelFuture chFuture = ctx.writeAndFlush(resByteBuf);
 		chFuture.addListener(future -> {
