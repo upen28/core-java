@@ -28,8 +28,9 @@ public class PostilionHalfDupexDecoder extends ByteToMessageDecoder {
 		if (isoByteBuf != null) {
 			out.add(isoByteBuf);
 		}
-		event.complete(Boolean.TRUE);
-		System.out.println("response hex dump" + System.lineSeparator() + hexDump(isoByteBuf));
+		if (event != null) {
+			event.complete(Boolean.TRUE);
+		}
 	}
 
 	private Object decode(ChannelHandlerContext ctx, ByteBuf byteBuf) {
@@ -68,7 +69,9 @@ public class PostilionHalfDupexDecoder extends ByteToMessageDecoder {
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		System.out.println("exception 	caught " + this.getClass().getName() + "  " + cause.getMessage());
 		super.exceptionCaught(ctx, cause);
-		event.completeExceptionally(cause);
+		if (event != null) {
+			event.completeExceptionally(cause);
+		}
 	}
 
 	public static String hexDump(ByteBuf buffer) {

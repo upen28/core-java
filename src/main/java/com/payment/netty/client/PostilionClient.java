@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import org.jpos.iso.ISOUtil;
 
 import com.payment.jpos.PostPackagerRND;
+import com.payment.netty.client.handlers.PostilionClientResHandler;
 import com.payment.netty.client.handlers.PostilionHalfDupexDecoder;
 
 import io.netty.bootstrap.Bootstrap;
@@ -37,7 +38,8 @@ public class PostilionClient {
 			bootStrap.handler(new ChannelInitializer<SocketChannel>() {
 				@Override
 				public void initChannel(SocketChannel ch) throws Exception {
-					ch.pipeline().addFirst(new PostilionHalfDupexDecoder());
+					ch.pipeline().addLast(new PostilionHalfDupexDecoder());
+					ch.pipeline().addLast(new PostilionClientResHandler());
 					Iterator<Entry<String, ChannelHandler>> it = ch.pipeline().iterator();
 					while (it.hasNext()) {
 						Entry<String, ChannelHandler> entry = it.next();

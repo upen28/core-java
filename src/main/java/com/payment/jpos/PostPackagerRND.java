@@ -73,7 +73,7 @@ public class PostPackagerRND {
 		_1271_25Msg.set(29, "00");
 		_1271_25Msg.set(30, "C5240879");
 
-		msg.dump(System.out, "");
+		//msg.dump(System.out, "");
 		return msg;
 	}
 
@@ -128,7 +128,7 @@ public class PostPackagerRND {
 		_127Msg.set(_1271_25Msg);
 		_1271_25Msg.set(31, "8323708DAB52AF473030");
 
-		msg.dump(System.out, "");
+		//msg.dump(System.out, "");
 		return msg;
 	}
 
