@@ -1,5 +1,5 @@
 
-package com.payment.netty.client.handlers;
+package com.payment.tcp.client.handlers;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -11,15 +11,15 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
-public class PostilionHalfDupexDecoder extends ByteToMessageDecoder {
+public class LengthBasedDecoder extends ByteToMessageDecoder {
 
-	private CompletableFuture<Boolean> event;
+	private CompletableFuture<ByteBuf> event;
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
 		super.userEventTriggered(ctx, evt);
-		event = (CompletableFuture<Boolean>) evt;
+		event = (CompletableFuture<ByteBuf>) evt;
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class PostilionHalfDupexDecoder extends ByteToMessageDecoder {
 			out.add(isoByteBuf);
 		}
 		if (event != null) {
-			event.complete(Boolean.TRUE);
+			event.complete(isoByteBuf);
 		}
 	}
 

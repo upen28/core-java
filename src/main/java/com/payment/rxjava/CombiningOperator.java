@@ -2,7 +2,7 @@ package com.payment.rxjava;
 
 import java.util.concurrent.TimeUnit;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 public class CombiningOperator {
 

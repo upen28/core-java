@@ -3,16 +3,12 @@ package com.payment.io.tcp.server.pipeline.handlers;
 
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
 public class LengthBasedDecoder extends ByteToMessageDecoder {
-	private static final Logger LOGGER = LogManager.getLogger(LengthBasedDecoder.class);
 	private int msgLength;
 	private ByteDecoder byteDecoder = new TwoByteDecoder();
 
@@ -44,7 +40,6 @@ public class LengthBasedDecoder extends ByteToMessageDecoder {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		LOGGER.fatal("exception 	caught " + this.getClass().getName() + "  " + cause.getMessage());
 		super.exceptionCaught(ctx, cause);
 	}
 

@@ -1,5 +1,5 @@
 
-package com.payment.jpos;
+package com.payment.netty;
 
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOUtil;
@@ -9,17 +9,13 @@ public class PostPackagerRND {
 
 	public static ISOMsg test0100Req() throws Exception {
 		ISOMsg msg = new ISOMsg();
-		// Logger logger = new Logger();
-		// logger.addListener(new SimpleLogListener(System.out));
-
 		GenericPackager packager = new GenericPackager("jar:postpack.xml");
-		// ((LogSource) packager).setLogger(logger, "debug");
 		msg.setPackager(packager);
 
 		msg.set(0, "0100");
 		msg.set(2, "4848500000000008008");
 		msg.set(3, "000000");
-		msg.set(4, "000000009447");
+		msg.set(4, "9447");
 		msg.set(7, "0609114338");
 		msg.set(11, "323058");
 		msg.set(12, "134338");
@@ -39,7 +35,7 @@ public class PostPackagerRND {
 		msg.set(42, "000008300026708");
 		msg.set(43, "WOERMANN OLIMPIA 60 - PWINDHOEK     NANA");
 		msg.set(49, "516");
-		msg.set(59, "17520.1245");
+		msg.set(59, "17520.1245");//
 		msg.set(100, "100");
 		msg.set(123, "51010151133C101");
 
@@ -73,17 +69,14 @@ public class PostPackagerRND {
 		_1271_25Msg.set(29, "00");
 		_1271_25Msg.set(30, "C5240879");
 
-		//msg.dump(System.out, "");
+		msg.dump(System.out, "");
+		System.out.println(ISOUtil.hexdump(msg.pack()));
 		return msg;
 	}
 
 	public static ISOMsg test0100Res() throws Exception {
 		ISOMsg msg = new ISOMsg();
-		// Logger logger = new Logger();
-		// logger.addListener(new SimpleLogListener(System.out));
-
 		GenericPackager packager = new GenericPackager("jar:postpack.xml");
-		// ((LogSource) packager).setLogger(logger, "debug");
 		msg.setPackager(packager);
 
 		msg.set(0, "0110");
@@ -128,17 +121,14 @@ public class PostPackagerRND {
 		_127Msg.set(_1271_25Msg);
 		_1271_25Msg.set(31, "8323708DAB52AF473030");
 
-		//msg.dump(System.out, "");
+		msg.dump(System.out, "");
+		System.out.println(ISOUtil.hexdump(msg.pack()));
 		return msg;
 	}
 
-	public static void test0220Req() throws Exception {
+	public static ISOMsg test0220Req() throws Exception {
 		ISOMsg msg = new ISOMsg();
-		// Logger logger = new Logger();
-		// logger.addListener(new SimpleLogListener(System.out));
-
 		GenericPackager packager = new GenericPackager("jar:postpack.xml");
-		// ((LogSource) packager).setLogger(logger, "debug");
 		msg.setPackager(packager);
 
 		msg.set(0, "0220");
@@ -203,18 +193,15 @@ public class PostPackagerRND {
 		_1271_25Msg.set(30, "C5240879");
 		_1271_25Msg.set(31, "8323708DAB52AF473030");
 
-		System.out.println(ISOUtil.hexdump(msg.pack()));
 		msg.dump(System.out, "");
+		System.out.println(ISOUtil.hexdump(msg.pack()));
+		return msg;
 
 	}
 
-	public static void test0220Res() throws Exception {
+	public static ISOMsg test0220Res() throws Exception {
 		ISOMsg msg = new ISOMsg();
-		// Logger logger = new Logger();
-		// logger.addListener(new SimpleLogListener(System.out));
-
 		GenericPackager packager = new GenericPackager("jar:postpack.xml");
-		// ((LogSource) packager).setLogger(logger, "debug");
 		msg.setPackager(packager);
 
 		msg.set(0, "0230");
@@ -252,18 +239,15 @@ public class PostPackagerRND {
 		ISOMsg _130Msg = new ISOMsg(130);
 		msg.set(_130Msg);
 
-		System.out.println(ISOUtil.hexdump(msg.pack()));
 		msg.dump(System.out, "");
+		System.out.println(ISOUtil.hexdump(msg.pack()));
+		return msg;
 
 	}
 
-	public static void test0200Req() throws Exception {
+	public static ISOMsg test0200Req() throws Exception {
 		ISOMsg msg = new ISOMsg();
-		// Logger logger = new Logger();
-		// logger.addListener(new SimpleLogListener(System.out));
-
 		GenericPackager packager = new GenericPackager("jar:postpack.xml");
-		// ((LogSource) packager).setLogger(logger, "debug");
 		msg.setPackager(packager);
 
 		msg.set(0, "0200");
@@ -323,18 +307,15 @@ public class PostPackagerRND {
 		_1271_25Msg.set(29, "00");
 		_1271_25Msg.set(30, "61A01C64");
 
-		System.out.println(ISOUtil.hexdump(msg.pack()));
 		msg.dump(System.out, "");
+		System.out.println(ISOUtil.hexdump(msg.pack()));
+		return msg;
 
 	}
 
-	public static void test0200Res() throws Exception {
+	public static ISOMsg test0200Res() throws Exception {
 		ISOMsg msg = new ISOMsg();
-		// Logger logger = new Logger();
-		// logger.addListener(new SimpleLogListener(System.out));
-
 		GenericPackager packager = new GenericPackager("jar:postpack.xml");
-		// ((LogSource) packager).setLogger(logger, "debug");
 		msg.setPackager(packager);
 
 		msg.set(0, "0210");
@@ -376,20 +357,20 @@ public class PostPackagerRND {
 		_127Msg.set(6, "11");
 		_127Msg.set(20, "20200609");
 		_127Msg.set(22,
-				"[RspRoutingInformation]=[XXXXXXXX] [TempProcCode]=[XXXXXXXX] [Postilion:MetaData]=[XXXXXXXX] [&&REMOVE]=[XXXXXXXX] [Nedbank::Server]=[XXXXXXXX]");
+				"[RspRoutingInformation]=[XXXXXXXX] [TempProcCode]=[XXXXXXXX] [Postilion:MetaData]=[XXXXXXXX] [&&REMOVE]=[XXXXXXXX] [Nedbank::Server]=[XXXXXXXX]");// missing
 
 		ISOMsg _1271_25Msg = new ISOMsg(25);
 		_127Msg.set(_1271_25Msg);
 		_1271_25Msg.set(6, "0009");
 		_1271_25Msg.set(31, "D64327682CA867613030");
 
-		System.out.println(ISOUtil.hexdump(msg.pack()));
 		msg.dump(System.out, "");
+		System.out.println(ISOUtil.hexdump(msg.pack()));
+		return msg;
 
 	}
 
 	public static void main(String... args) throws Exception {
-		test0220Req();
-		test0220Res();
+		test0100Req();
 	}
 }

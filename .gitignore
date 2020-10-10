@@ -1,32 +1,30 @@
-# Package Files #
+# Ignore Gradle project-specific cache directory
+.gradle
+# Ignore Gradle build output directory
+build
+
+# Java related
+target/**
 *.jar
 *.war
 *.ear
-*.zip
-
-# IDE Files #
-.classpath
-.project
-.settings/
-.idea/
-*.iml
-
-.gradle/
-dist
-build
-bin
-4cc.checksum
 *.class
-target/
-test-output/
-build.xml
-/.metadata
-dist
-build
-bin
-rebel.xml
-/tests/
-/coverage/
-/cobertura.ser
-*/temp_persist_config_*.xml
-*/src/main/resources/buildinfo.properties
+
+# eclipse specific
+*.pydevproject
+.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
+# STS (Spring Tool Suite)
+.springBeans

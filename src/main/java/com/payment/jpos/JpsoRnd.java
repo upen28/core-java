@@ -23,21 +23,6 @@ public class JpsoRnd {
 		return ISOCurrency.getCurrency(currencyCode).getAlphaCode();
 	}
 
-	public static Double getAmount(String amountStr, String currencyCode) throws Exception {
-		Currency currency = ISOCurrency.getCurrency(currencyCode);
-		int dec = currency.getDecimals();
-		BigDecimal test = new BigDecimal(amountStr).movePointLeft(dec);
-		return test.doubleValue();
-	}
-
-	public static void testISOAmount() throws Exception {
-		ISOAmount iSOAmount = new ISOAmount(4, 710, new BigDecimal("000000004000"));
-		System.out.println(iSOAmount.getScale());
-		System.out.println(iSOAmount.getAmount());
-		System.out.println(iSOAmount.getAmountAsLegacyString());
-		System.out.println(iSOAmount.getAmountAsString());
-	}
-
 	public static void testCurrencies() throws Exception {
 		List<java.util.Currency> currencies = java.util.Currency.getAvailableCurrencies().stream()
 				.sorted(Comparator.comparing(java.util.Currency::getCurrencyCode)).collect(Collectors.toList());
@@ -54,6 +39,24 @@ public class JpsoRnd {
 		});
 	}
 
+	public static void testISOAmount() throws Exception {
+		ISOAmount iSOAmount = new ISOAmount(4);
+		iSOAmount.setValue("840200001414");
+		System.out.println(iSOAmount.getValue());
+		System.out.println(iSOAmount.getScale());
+		System.out.println(iSOAmount.getAmount());
+		System.out.println(iSOAmount.getAmountAsLegacyString());
+		System.out.println(iSOAmount.getAmountAsString());
+	}
+
+	public static void testISOAmountInDecimal() throws Exception {
+		ISOAmount iSOAmount = new ISOAmount(4, 840, new BigDecimal("14.14"));
+		System.out.println(iSOAmount.getScale());
+		System.out.println(iSOAmount.getAmount());
+		System.out.println(iSOAmount.getAmountAsLegacyString());
+		System.out.println(iSOAmount.getAmountAsString());
+	}
+
 	public static void testPrefixer() throws ISOException {
 		AsciiPrefixer prefixer = AsciiPrefixer.LL;
 		byte[] bts = new byte[2];
@@ -64,7 +67,6 @@ public class JpsoRnd {
 		bts = new byte[1];
 		binaryPrefixer.encodeLength(56, bts);
 		System.out.println(ISOUtil.hexdump(bts));
-
 	}
 
 	public static void testEbcdic() {
@@ -85,10 +87,9 @@ public class JpsoRnd {
 		byte[] dst2 = new byte[20];
 		EbcdicInterpreter.INSTANCE.interpret(s, dst2, 0);
 		System.out.println(ISOUtil.hexdump(dst2));
-
 	}
 
 	public static void main(String... args) throws Exception {
-
+		testISOAmount();
 	}
 }

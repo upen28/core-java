@@ -1,0 +1,4 @@
+dependencies{
+	compile group: 'io.netty', name: 'netty-all', version: '4.1.52.Final'
+	compile group: 'org.jpos', name: 'jpos', version: '2.1.4'
+}

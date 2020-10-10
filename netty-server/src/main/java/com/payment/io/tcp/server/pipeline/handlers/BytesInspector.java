@@ -11,49 +11,49 @@ import io.netty.channel.ChannelPromise;
 
 public class BytesInspector extends ChannelDuplexHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(BytesInspector.class);
+	private static final Logger logger = LoggerFactory.getLogger(BytesInspector.class);
 
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        try {
-            if (ByteBuf.class.isAssignableFrom(msg.getClass())) {
-                publishBytesRead((ByteBuf) msg);
-            } else if (ByteBufHolder.class.isAssignableFrom(msg.getClass())) {
-                ByteBufHolder holder = (ByteBufHolder) msg;
-                publishBytesRead(holder.content());
-            }
-        } catch (Exception e) {
-            logger.warn("Failed to publish bytes read metrics event. This does *not* stop the pipeline processing.", e);
-        } finally {
-            super.channelRead(ctx, msg);
-        }
-    }
+	@Override
+	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+		try {
+			if (ByteBuf.class.isAssignableFrom(msg.getClass())) {
+				publishBytesRead((ByteBuf) msg);
+			} else if (ByteBufHolder.class.isAssignableFrom(msg.getClass())) {
+				ByteBufHolder holder = (ByteBufHolder) msg;
+				publishBytesRead(holder.content());
+			}
+		} catch (Exception e) {
+			logger.warn("Failed to publish bytes read metrics event. This does *not* stop the pipeline processing.", e);
+		} finally {
+			super.channelRead(ctx, msg);
+		}
+	}
 
-    @Override
-    public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-        try {
-            if (ByteBuf.class.isAssignableFrom(msg.getClass())) {
-                publishBytesWritten(((ByteBuf) msg).readableBytes(), promise);
-            } else if (ByteBufHolder.class.isAssignableFrom(msg.getClass())) {
-                publishBytesWritten(((ByteBufHolder) msg).content().readableBytes(), promise);
-            }
-        } catch (Exception e) {
-            logger.warn("Failed to publish bytes write metrics event. This does *not* stop the pipeline processing.",
-                    e);
-        } finally {
-            super.write(ctx, msg, promise);
-        }
-    }
+	@Override
+	public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+		try {
+			if (ByteBuf.class.isAssignableFrom(msg.getClass())) {
+				publishBytesWritten(((ByteBuf) msg).readableBytes(), promise);
+			} else if (ByteBufHolder.class.isAssignableFrom(msg.getClass())) {
+				publishBytesWritten(((ByteBufHolder) msg).content().readableBytes(), promise);
+			}
+		} catch (Exception e) {
+			logger.warn("Failed to publish bytes write metrics event. This does *not* stop the pipeline processing.",
+					e);
+		} finally {
+			super.write(ctx, msg, promise);
+		}
+	}
 
-    protected void publishBytesWritten(final long bytesToWrite, ChannelPromise promise) {
-        if (bytesToWrite <= 0) {
-            return;
-        }
+	protected void publishBytesWritten(final long bytesToWrite, ChannelPromise promise) {
+		if (bytesToWrite <= 0) {
+			return;
+		}
 
-    }
+	}
 
-    protected void publishBytesRead(ByteBuf byteBuf) {
-        if (null != byteBuf) {
-        }
-    }
+	protected void publishBytesRead(ByteBuf byteBuf) {
+		if (null != byteBuf) {
+		}
+	}
 }

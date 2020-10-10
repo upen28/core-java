@@ -1,0 +1,15 @@
+allprojects{
+	apply plugin: 'java'
+	repositories {
+		jcenter()
+	}
+}
+subprojects{
+	dependencies {
+		compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: '2.3.4.RELEASE'
+	}
+}
+dependencies {
+	compile group: 'org.jpos', name: 'jpos', version: '2.1.4'
+	compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.20'
+}

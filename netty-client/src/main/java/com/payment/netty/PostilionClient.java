@@ -1,21 +1,16 @@
 
-package com.payment.netty.client;
-
-import java.util.Iterator;
-import java.util.Map.Entry;
+package com.payment.netty;
 
 import org.jpos.iso.ISOUtil;
 
-import com.payment.jpos.PostPackagerRND;
-import com.payment.netty.client.handlers.PostilionClientResHandler;
-import com.payment.netty.client.handlers.PostilionHalfDupexDecoder;
+import com.payment.tcp.client.handlers.InReqHandlerForIsoMsg;
+import com.payment.tcp.client.handlers.LengthBasedDecoder;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -38,13 +33,8 @@ public class PostilionClient {
 			bootStrap.handler(new ChannelInitializer<SocketChannel>() {
 				@Override
 				public void initChannel(SocketChannel ch) throws Exception {
-					ch.pipeline().addLast(new PostilionHalfDupexDecoder());
-					ch.pipeline().addLast(new PostilionClientResHandler());
-					Iterator<Entry<String, ChannelHandler>> it = ch.pipeline().iterator();
-					while (it.hasNext()) {
-						Entry<String, ChannelHandler> entry = it.next();
-						System.out.println(entry.getKey() + " " + entry.getValue());
-					}
+					ch.pipeline().addLast(new LengthBasedDecoder());
+					ch.pipeline().addLast(new InReqHandlerForIsoMsg());
 				}
 			});
 			ChannelFuture connectFuture = bootStrap.connect(ip, port);
@@ -76,11 +66,11 @@ public class PostilionClient {
 	public void processTransaction() throws Exception {
 		Channel channel = connect("127.0.0.1", 9999);
 		ByteBuf buf = Unpooled.buffer();
-		buf.writeBytes(to_0100Req());
+		buf.writeBytes(to_Request());
 		channel.writeAndFlush(buf);
 	}
 
-	private ByteBuf to_0100Req() throws Exception {
+	private ByteBuf to_Request() throws Exception {
 		byte[] dst = PostPackagerRND.test0100Req().pack();
 		ByteBuf isoByteBuf = Unpooled.buffer();
 		isoByteBuf.writeBytes(dst);
