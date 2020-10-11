@@ -1,15 +1,24 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.4.RELEASE' apply true
+}
 allprojects{
 	apply plugin: 'java'
+	apply plugin: 'org.springframework.boot' 
 	repositories {
 		jcenter()
+	}
+	dependencies {
+		implementation(platform('org.springframework.boot:spring-boot-dependencies:2.3.4.RELEASE'))
 	}
 }
 subprojects{
 	dependencies {
-		compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: '2.3.4.RELEASE'
+		implementation('org.springframework.boot:spring-boot-starter')
 	}
 }
 dependencies {
-	compile group: 'org.jpos', name: 'jpos', version: '2.1.4'
-	compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.20'
+	implementation group: 'org.jpos', name: 'jpos', version: '2.1.4'
+	implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.20'
 }
+
+
