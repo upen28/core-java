@@ -12,38 +12,38 @@ public class PostPackagerRND {
 		GenericPackager packager = new GenericPackager("jar:postpack.xml");
 		msg.setPackager(packager);
 
-		msg.set(0, "0100");
-		msg.set(2, "4848500000000008008");
-		msg.set(3, "000000");
-		msg.set(4, "9447");
-		msg.set(7, "0609114338");
-		msg.set(11, "323058");
-		msg.set(12, "134338");
-		msg.set(13, "0609");
-		msg.set(14, "2203");
-		msg.set(15, "0609");
-		msg.set(18, "7299");
-		msg.set(22, "051");
-		msg.set(23, "000");
-		msg.set(25, "00");
-		msg.set(26, "12");
-		msg.set(32, "100");
-		msg.set(35, "4848500000000008008=22030000000000000");
-		msg.set(37, "000051876275");
-		msg.set(40, "226");
-		msg.set(41, "00000004");
-		msg.set(42, "000008300026708");
-		msg.set(43, "WOERMANN OLIMPIA 60 - PWINDHOEK     NANA");
-		msg.set(49, "516");
-		msg.set(59, "17520.1245");//
-		msg.set(100, "100");
-		msg.set(123, "51010151133C101");
+		msg.set(0, "0100"); // Mandatory
+		msg.set(2, "4848500000000008008");// Conditional
+		msg.set(3, "000000");// Mandatory
+		msg.set(4, "9447");// Mandatory
+		msg.set(7, "0609114338");// Mandatory
+		msg.set(11, "323058");// Mandatory
+		msg.set(12, "134338");// Mandatory
+		msg.set(13, "0609");// Mandatory
+		msg.set(14, "2203");// Conditional
+		msg.set(15, "0609");// Conditional
+		msg.set(18, "7299");// Conditional
+		msg.set(22, "051");// Mandatory
+		msg.set(23, "000");// Conditional
+		msg.set(25, "00");// Mandatory
+		msg.set(26, "12");// Conditional
+		msg.set(32, "100");// Conditional
+		msg.set(35, "4848500000000008008=22030000000000000");// Conditional
+		msg.set(37, "000051876275");// Optional
+		msg.set(40, "226");// Optional
+		msg.set(41, "00000004");// Mandatory
+		msg.set(42, "000008300026708");// Mandatory
+		msg.set(43, "WOERMANN OLIMPIA 60 - PWINDHOEK     NANA");// Mandatory
+		msg.set(49, "516");// Mandatory
+		msg.set(59, "17520.1245");// Optional
+		msg.set(100, "100");// Conditional
+		msg.set(123, "51010151133C101");// Mandatory
 
 		ISOMsg _127Msg = new ISOMsg(127);
 		msg.set(_127Msg);
-		_127Msg.set(22, "[TenderDetailGUID]=[XXXXXXXX] [Postilion:MetaData]=[XXXXXXXX]");
+		_127Msg.set(22, "[TenderDetailGUID]=[XXXXXXXX] [Postilion:MetaData]=[XXXXXXXX]");// Optional
 
-		ISOMsg _1271_25Msg = new ISOMsg(25);
+		ISOMsg _1271_25Msg = new ISOMsg(25);// Conditional
 		_127Msg.set(_1271_25Msg);
 
 		_1271_25Msg.set(2, "000000009447");
@@ -131,41 +131,41 @@ public class PostPackagerRND {
 		GenericPackager packager = new GenericPackager("jar:postpack.xml");
 		msg.setPackager(packager);
 
-		msg.set(0, "0220");
-		msg.set(2, "4848500000000008008");
-		msg.set(3, "000000");
-		msg.set(4, "000000009447");
-		msg.set(7, "0609114355");
-		msg.set(11, "323058");
-		msg.set(12, "134338");
-		msg.set(13, "0609");
-		msg.set(14, "2203");
-		msg.set(15, "0609");
-		msg.set(18, "7299");
-		msg.set(22, "051");
-		msg.set(23, "000");
-		msg.set(25, "00");
-		msg.set(26, "12");
-		msg.set(32, "100");
-		msg.set(35, "4848500000000008008=22030000000000000");
-		msg.set(37, "000051876275");
-		msg.set(38, "409924");
-		msg.set(39, "00");
-		msg.set(40, "226");
-		msg.set(41, "00000004");
-		msg.set(42, "000008300026708");
-		msg.set(43, "WOERMANN OLIMPIA 60 - PWINDHOEK     NANA");
-		msg.set(49, "516");
-		msg.set(54, "0053516D000000009447");
-		msg.set(59, "17520.1245");
-		msg.set(100, "100");
-		msg.set(123, "51010151133C101");
+		msg.set(0, "0220");// Mandatory
+		msg.set(2, "4848500000000008008");// Conditional
+		msg.set(3, "000000");// Mandatory
+		msg.set(4, "000000009447");// Mandatory
+		msg.set(7, "0609114355");// Mandatory
+		msg.set(11, "323058");// Mandatory
+		msg.set(12, "134338");// Mandatory
+		msg.set(13, "0609");// Mandatory
+		msg.set(14, "2203");// Conditional
+		msg.set(15, "0609");// Conditional
+		msg.set(18, "7299");// Conditional
+		msg.set(22, "051");// Mandatory
+		msg.set(23, "000");// Conditional
+		msg.set(25, "00");// Mandatory
+		msg.set(26, "12");// Conditional
+		msg.set(32, "100");// Conditional
+		msg.set(35, "4848500000000008008=22030000000000000");// Conditional
+		msg.set(37, "000051876275");// Conditional
+		msg.set(38, "409924");// Optional
+		msg.set(39, "00");// Optional
+		msg.set(40, "226");// Optional
+		msg.set(41, "00000004");// Mandatory
+		msg.set(42, "000008300026708");// Mandatory
+		msg.set(43, "WOERMANN OLIMPIA 60 - PWINDHOEK     NANA");// Mandatory
+		msg.set(49, "516");// Mandatory
+		msg.set(54, "0053516D000000009447");// Conditional
+		msg.set(59, "17520.1245");// Optional
+		msg.set(100, "100");// Conditional
+		msg.set(123, "51010151133C101");// Mandatory
 
 		ISOMsg _127Msg = new ISOMsg(127);
 		msg.set(_127Msg);
-		_127Msg.set(22, "[TenderDetailGUID]=[XXXXXXXX] [Postilion:MetaData]=[XXXXXXXX]");
+		_127Msg.set(22, "[TenderDetailGUID]=[XXXXXXXX] [Postilion:MetaData]=[XXXXXXXX]");// Optional
 
-		ISOMsg _1271_25Msg = new ISOMsg(25);
+		ISOMsg _1271_25Msg = new ISOMsg(25);// Conditional
 		_127Msg.set(_1271_25Msg);
 
 		_1271_25Msg.set(2, "000000009447");
@@ -368,6 +368,22 @@ public class PostPackagerRND {
 		System.out.println(ISOUtil.hexdump(msg.pack()));
 		return msg;
 
+	}
+
+	public static ISOMsg test0420Req() throws Exception {
+		// 3 Processing code Mandatory
+		// 4 Amount, transaction Mandatory
+		// 11 System trace audit number Mandatory
+		// 12 Time, local transaction Mandatory
+		// 13 Date, local transaction Mandatory
+		// 22 POS entry mode Mandatory
+		// 25 POS condition code Mandatory
+		// 41 Card acceptor terminal ID Mandatory
+		// 42 Card acceptor ID code Mandatory
+		// 43 Card acceptor name location Mandatory
+		// 90 Original data elements Mandatory
+		// 123 POS data code Mandatory
+		return null;
 	}
 
 	public static void main(String... args) throws Exception {
