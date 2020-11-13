@@ -2,6 +2,7 @@
 package com.payment.tcp.client.handlers;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.jpos.iso.ISOUtil;
 
@@ -10,13 +11,23 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
-public class LengthBasedDecoder extends ByteToMessageDecoder {
+public class HalfDuplexLengthBasedDecoder extends ByteToMessageDecoder {
+
+	private CompletableFuture<ByteBuf> event;
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+		super.userEventTriggered(ctx, evt);
+		event = (CompletableFuture<ByteBuf>) evt;
+	}
 
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) throws Exception {
-		ByteBuf decodeByteBuf = (ByteBuf) decode(ctx, byteBuf);
-		if (decodeByteBuf != null) {
-			out.add(decodeByteBuf);
+		ByteBuf isoByteBuf = (ByteBuf) decode(ctx, byteBuf);
+		if (event != null) {
+			event.complete(isoByteBuf);
+			event = null;
 		}
 	}
 
@@ -48,6 +59,9 @@ public class LengthBasedDecoder extends ByteToMessageDecoder {
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		System.out.println("exception 	caught " + this.getClass().getName() + "  " + cause.getMessage());
 		super.exceptionCaught(ctx, cause);
+		if (event != null) {
+			event.completeExceptionally(cause);
+		}
 	}
 
 	public static String hexDump(ByteBuf buffer) {

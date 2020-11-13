@@ -1,11 +1,20 @@
 
 package com.payment.netty;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+
 import org.jpos.iso.ISOMsg;
 import org.jpos.iso.ISOUtil;
 import org.jpos.iso.packager.GenericPackager;
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 
 public class PostPackagerRND {
+
+	public static Logger logger = (Logger) LoggerFactory.getLogger(PostPackagerRND.class);
 
 	public static ISOMsg test0100Req() throws Exception {
 		ISOMsg msg = new ISOMsg();
@@ -70,11 +79,10 @@ public class PostPackagerRND {
 		_1271_25Msg.set(30, "C5240879");
 
 		msg.dump(System.out, "");
-		System.out.println(ISOUtil.hexdump(msg.pack()));
 		return msg;
 	}
 
-	public static ISOMsg test0100Res() throws Exception {
+	public static ISOMsg test0100Res(ISOMsg reqIsoMsg) throws Exception {
 		ISOMsg msg = new ISOMsg();
 		GenericPackager packager = new GenericPackager("jar:postpack.xml");
 		msg.setPackager(packager);
@@ -84,7 +92,7 @@ public class PostPackagerRND {
 		msg.set(3, "000000");
 		msg.set(4, "000000009447");
 		msg.set(7, "0609114338");
-		msg.set(11, "323058");
+		msg.set(11, reqIsoMsg.getString(11));
 		msg.set(12, "134338");
 		msg.set(13, "0609");
 		msg.set(14, "2203");
@@ -121,8 +129,7 @@ public class PostPackagerRND {
 		_127Msg.set(_1271_25Msg);
 		_1271_25Msg.set(31, "8323708DAB52AF473030");
 
-		msg.dump(System.out, "");
-		System.out.println(ISOUtil.hexdump(msg.pack()));
+		msg.dump(System.out, "outgoing");
 		return msg;
 	}
 
@@ -194,7 +201,6 @@ public class PostPackagerRND {
 		_1271_25Msg.set(31, "8323708DAB52AF473030");
 
 		msg.dump(System.out, "");
-		System.out.println(ISOUtil.hexdump(msg.pack()));
 		return msg;
 
 	}
@@ -240,7 +246,6 @@ public class PostPackagerRND {
 		msg.set(_130Msg);
 
 		msg.dump(System.out, "");
-		System.out.println(ISOUtil.hexdump(msg.pack()));
 		return msg;
 
 	}
@@ -284,31 +289,30 @@ public class PostPackagerRND {
 		ISOMsg _1271_25Msg = new ISOMsg(25);
 		_127Msg.set(_1271_25Msg);
 
-		_1271_25Msg.set(2, "000000011499");
-		_1271_25Msg.set(3, "000000000000");
-		_1271_25Msg.set(4, "A0000000031010");
-		_1271_25Msg.set(5, "3C00");
-		_1271_25Msg.set(6, "0180");
-		_1271_25Msg.set(7, "FF80");
-		_1271_25Msg.set(12, "B7948A78DA1E0C70");
-		_1271_25Msg.set(13, "80");
-		_1271_25Msg.set(14, "000000000000000002054403410342035E031F02");
-		_1271_25Msg.set(15, "440302");
-		_1271_25Msg.set(16, "03141271");
-		_1271_25Msg.set(17, "0B8683C9800");
-		_1271_25Msg.set(18, "06010A03A42002");
-		_1271_25Msg.set(20, "009A");
-		_1271_25Msg.set(21, "E0F0C8");
-		_1271_25Msg.set(22, "516");
-		_1271_25Msg.set(23, "22");
-		_1271_25Msg.set(24, "0080008000");
-		_1271_25Msg.set(26, "516");
-		_1271_25Msg.set(27, "200609");
-		_1271_25Msg.set(29, "00");
-		_1271_25Msg.set(30, "61A01C64");
+		_1271_25Msg.set(2, "000000011499");// icc_data.tag_9F02 Amount Authorized
+		_1271_25Msg.set(3, "000000000000");// icc_data.tag_9F03 Amount Other
+		_1271_25Msg.set(4, "A0000000031010");// icc_data.tag_9F06 Application Identifier
+		_1271_25Msg.set(5, "3C00");// icc_data.tag_82 Application Interchange Profile
+		_1271_25Msg.set(6, "0180");// icc_data.tag_9F36 Application Transaction Counter
+		_1271_25Msg.set(7, "FF80");// icc_data.tag_9F07 Application Usage Control
+		_1271_25Msg.set(12, "B7948A78DA1E0C70");// icc_data.tag_9F26 Cryptogram
+		_1271_25Msg.set(13, "80");// icc_data.tag_9F27 Cryptogram Information Data
+		_1271_25Msg.set(14, "000000000000000002054403410342035E031F02");// icc_data.tag_8E Cvm List
+		_1271_25Msg.set(15, "440302");// icc_data.tag_9F34 Cvm Results
+		_1271_25Msg.set(16, "03141271");// icc_data.tag_9F1E Interface Device Serial Number
+		_1271_25Msg.set(17, "0B8683C9800");// icc_data.tag_9F0D Issuer Action Code
+		_1271_25Msg.set(18, "06010A03A42002");// icc_data.tag_9F10 Issuer Application Data
+		_1271_25Msg.set(20, "009A");// icc_data.tag_9F09 Terminal Application Version Number
+		_1271_25Msg.set(21, "E0F0C8");// icc_data.tag_9F33 Terminal Capabilities
+		_1271_25Msg.set(22, "516");// icc_data.tag_9F1A Terminal Country Code
+		_1271_25Msg.set(23, "22");// icc_data.tag_9F35 Terminal Type
+		_1271_25Msg.set(24, "0080008000");// icc_data.tag_95 Terminal Verification Result
+		_1271_25Msg.set(26, "516");// icc_data.tag_5F2A Transaction Currency Code
+		_1271_25Msg.set(27, "200609");// icc_data.tag_9A Transaction Date
+		_1271_25Msg.set(29, "00");// icc_data.tag_9C Transaction Type
+		_1271_25Msg.set(30, "61A01C64");// icc_data.tag_9F37 Unpredictable Number
 
 		msg.dump(System.out, "");
-		System.out.println(ISOUtil.hexdump(msg.pack()));
 		return msg;
 
 	}
@@ -364,7 +368,6 @@ public class PostPackagerRND {
 		_1271_25Msg.set(6, "0009");
 		_1271_25Msg.set(31, "D64327682CA867613030");
 
-		msg.dump(System.out, "");
 		System.out.println(ISOUtil.hexdump(msg.pack()));
 		return msg;
 
@@ -386,7 +389,75 @@ public class PostPackagerRND {
 		return null;
 	}
 
+	public static byte[] getEchoMsg() throws Exception {
+		ISOMsg reqIsoMsg = new ISOMsg();
+		LocalDateTime dateTime = LocalDateTime.now();
+
+		GenericPackager packager = new GenericPackager("jar:postpack.xml");
+		reqIsoMsg.setPackager(packager);
+		reqIsoMsg.setMTI("0800");
+		reqIsoMsg.set(7, dateTime.format(DateTimeFormatter.ofPattern("MMddHHmmss")));
+		reqIsoMsg.set(11, "323058");
+		reqIsoMsg.set(12, dateTime.format(DateTimeFormatter.ofPattern("HHmmss")));
+		reqIsoMsg.set(13, dateTime.format(DateTimeFormatter.ofPattern("MMdd")));
+		reqIsoMsg.set(70, "301");
+		reqIsoMsg.dump(System.out, "");
+		return reqIsoMsg.pack();
+	}
+
+	public static byte[] getPinWorkingKey() throws Exception {
+		ISOMsg reqIsoMsg = new ISOMsg();
+		LocalDateTime dateTime = LocalDateTime.now();
+
+		GenericPackager packager = new GenericPackager("jar:postpack.xml");
+		reqIsoMsg.setPackager(packager);
+		reqIsoMsg.setMTI("0800");
+		reqIsoMsg.set(7, dateTime.format(DateTimeFormatter.ofPattern("MMddHHmmss")));
+		reqIsoMsg.set(11, "323058");
+		reqIsoMsg.set(12, dateTime.format(DateTimeFormatter.ofPattern("HHmmss")));
+		reqIsoMsg.set(13, dateTime.format(DateTimeFormatter.ofPattern("MMdd")));
+		reqIsoMsg.set(70, "101");
+		reqIsoMsg.set(125, "5DCE17F354FD1CA84791C213BC1B05BFFD031D");
+		reqIsoMsg.dump(System.out, "");
+		return reqIsoMsg.pack();
+	}
+
+	public static byte[] getSignInMsg() throws Exception {
+		ISOMsg reqIsoMsg = new ISOMsg();
+		LocalDateTime dateTime = LocalDateTime.now();
+		GenericPackager packager = new GenericPackager("jar:postpack.xml");
+		reqIsoMsg.setPackager(packager);
+		reqIsoMsg.setMTI("0800");
+		reqIsoMsg.set(7, dateTime.format(DateTimeFormatter.ofPattern("MMddHHmmss")));
+		reqIsoMsg.set(11, "323058");
+		reqIsoMsg.set(12, dateTime.format(DateTimeFormatter.ofPattern("HHmmss")));
+		reqIsoMsg.set(13, dateTime.format(DateTimeFormatter.ofPattern("MMdd")));
+		reqIsoMsg.set(70, "001");
+		reqIsoMsg.dump(System.out, "");
+		return reqIsoMsg.pack();
+	}
+
 	public static void main(String... args) throws Exception {
-		test0100Req();
+		LocalDateTime dateTime = LocalDateTime.now();
+		int month = dateTime.get(ChronoField.MONTH_OF_YEAR);
+		int day = dateTime.get(ChronoField.DAY_OF_MONTH);
+
+		int hh = dateTime.get(ChronoField.HOUR_OF_DAY);
+
+		int mm = dateTime.get(ChronoField.MINUTE_OF_HOUR);
+
+		int ss = dateTime.get(ChronoField.SECOND_OF_MINUTE);
+
+		System.out.println(month);
+		System.out.println(day);
+
+		System.out.println(hh);
+
+		System.out.println(mm);
+
+		System.out.println(ss);
+
+		System.out.println(dateTime.format(DateTimeFormatter.ofPattern("MMddHHmmss")));
+
 	}
 }

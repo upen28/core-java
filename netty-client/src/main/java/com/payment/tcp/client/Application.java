@@ -4,6 +4,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.jpos.iso.ISOMsg;
+import org.jpos.iso.packager.GenericPackager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -25,43 +27,66 @@ import io.netty.buffer.Unpooled;
 public class Application {
 	@Autowired
 	private TcpClientSyncMultiplexer multiplexer;
-	private ExecutorService executor = Executors.newFixedThreadPool(1);
 	private AtomicInteger success = new AtomicInteger();
 	private AtomicInteger error = new AtomicInteger();
+	private ExecutorService service = Executors.newCachedThreadPool();
 
 	public void processTrans() throws Exception {
-		Runnable task = () -> {
-			byte[] dst = null;
-			try {
-				dst = PostPackagerRND.test0100Req().pack();
-			} catch (Exception e) {
 
-			}
-			ByteBuf isoByteBuf = Unpooled.buffer();
-			isoByteBuf.writeBytes(dst);
-			int len = isoByteBuf.readableBytes();
+		sendTransaction(PostPackagerRND.getSignInMsg());
+		sleep(10000);
 
-			ByteBuf reqByteBuf = Unpooled.buffer();
-			reqByteBuf.writeByte(len >> 8);
-			reqByteBuf.writeByte(len);
-			reqByteBuf.writeBytes(isoByteBuf);
-			try {
-				ByteBuf resp = multiplexer.processTransaction(reqByteBuf, 40000);
-				if (resp != null && resp.isReadable()) {
-					success.getAndAdd(1);
+		sendTransaction(PostPackagerRND.getPinWorkingKey());
+
+		Runnable echoTask = () -> {
+			while (true) {
+				try {
+					sendTransaction(PostPackagerRND.getEchoMsg());
+				} catch (Exception e) {
+					System.out.println("Exception in sending message" + e.getLocalizedMessage());
 				}
-			} catch (Exception e) {
-				error.getAndAdd(1);
+				sleep(10000);
 			}
 		};
-		for (int i = 0; i < 1; i++) {
-			executor.execute(task);
-		}
-		Thread.sleep(300000);
-		System.out.println("success " + success.get());
-		System.out.println("error " + error.get());
+		service.execute(echoTask);
+		sleep(Integer.MAX_VALUE);
 
 	}
+
+	public void sleep(int millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void sendTransaction(byte[] dst) {
+		ByteBuf isoByteBuf = Unpooled.buffer();
+		isoByteBuf.writeBytes(dst);
+		int len = isoByteBuf.readableBytes();
+
+		ByteBuf reqByteBuf = Unpooled.buffer();
+		reqByteBuf.writeByte(len >> 8);
+		reqByteBuf.writeByte(len);
+		reqByteBuf.writeBytes(isoByteBuf);
+		try {
+			ByteBuf resByteBuf = multiplexer.processTransaction(reqByteBuf, 40000);
+			if (resByteBuf != null && resByteBuf.isReadable()) {
+				success.getAndAdd(1);
+				ISOMsg respIsoMsg = new ISOMsg();
+				GenericPackager packager = new GenericPackager("jar:postpack.xml");
+				respIsoMsg.setPackager(packager);
+				byte[] dstArray = new byte[resByteBuf.readableBytes()];
+				resByteBuf.readBytes(dstArray);
+				respIsoMsg.unpack(dstArray);
+				respIsoMsg.dump(System.out, "");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			error.getAndAdd(1);
+		}
+	};
 
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {

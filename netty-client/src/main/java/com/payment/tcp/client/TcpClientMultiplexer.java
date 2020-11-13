@@ -1,15 +1,13 @@
 package com.payment.tcp.client;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
-
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import com.payment.tcp.client.eventgroup.EventLoopGroupProvider;
-import com.payment.tcp.client.handlers.HalfDuplexLengthBasedDecoder;
+import com.payment.tcp.client.handlers.FinancialTransactionHandler;
+import com.payment.tcp.client.handlers.LengthBasedDecoder;
 import com.payment.tcp.client.properties.TcpClientProperties;
 
 import io.netty.bootstrap.Bootstrap;
@@ -24,7 +22,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
 
 @Configuration
-public class TcpClientSyncMultiplexer {
+public class TcpClientMultiplexer {
 	private ChannelPool channelPool;
 	@Autowired
 	private TcpClientProperties properties;
@@ -39,27 +37,20 @@ public class TcpClientSyncMultiplexer {
 		if (promise.isSuccess()) {
 			System.out.println("acquiring channel " + Thread.currentThread().getName());
 			Channel channel = promise.getNow();
-			return sendAndReceive(channel, buf, timeout);
+			return send(channel, buf, timeout);
 		} else {
 			throw new Exception("channelpool is busy please try some time later", promise.cause());
 		}
 	}
 
-	private ByteBuf sendAndReceive(Channel channel, ByteBuf buf, long timeout) throws Exception {
+	private ByteBuf send(Channel channel, ByteBuf buf, long timeout) throws Exception {
 		ByteBuf resByteBuf = null;
 		try {
-			CompletableFuture<ByteBuf> compFuture = new CompletableFuture<>();
-			channel.pipeline().fireUserEventTriggered(compFuture);
 			try {
 				channel.writeAndFlush(buf).await();
 			} catch (Exception ex) {
 				System.out.println("Exception in writing");
 				throw new Exception("exception in writing to channel", ex);
-			}
-			try {
-				resByteBuf = compFuture.get(timeout, TimeUnit.MILLISECONDS);
-			} catch (Exception ex) {
-				throw new Exception("exception in receiving message ", ex);
 			}
 		} finally {
 			channelPool.release(channel).await();
@@ -96,7 +87,7 @@ public class TcpClientSyncMultiplexer {
 	public static class ClientChannelPoolHandler implements ChannelPoolHandler {
 		@Override
 		public void channelReleased(Channel ch) throws Exception {
-
+			System.out.println("channel disconnected " + ch.id());
 		}
 
 		@Override
@@ -106,7 +97,10 @@ public class TcpClientSyncMultiplexer {
 
 		@Override
 		public void channelCreated(Channel ch) throws Exception {
-			ch.pipeline().addLast(new HalfDuplexLengthBasedDecoder());
+			System.out.println("channel connected " + ch.id());
+			ch.pipeline().addLast(new LengthBasedDecoder());
+			ch.pipeline().addLast(new FinancialTransactionHandler());
+
 		}
 	}
 }
