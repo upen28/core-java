@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import com.payment.tcp.client.eventgroup.EventLoopGroupProvider;
 import com.payment.tcp.client.handlers.HalfDuplexLengthBasedDecoder;
@@ -23,7 +23,7 @@ import io.netty.channel.pool.FixedChannelPool;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
 
-@Configuration
+@Component
 public class TcpClientSyncMultiplexer {
 	private ChannelPool channelPool;
 	@Autowired

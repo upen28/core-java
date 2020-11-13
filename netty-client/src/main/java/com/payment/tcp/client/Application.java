@@ -2,10 +2,7 @@ package com.payment.tcp.client;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import org.jpos.iso.ISOMsg;
-import org.jpos.iso.packager.GenericPackager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,18 +23,13 @@ import io.netty.buffer.Unpooled;
 @EnableConfigurationProperties(TcpClientProperties.class)
 public class Application {
 	@Autowired
-	private TcpClientSyncMultiplexer multiplexer;
-	private AtomicInteger success = new AtomicInteger();
-	private AtomicInteger error = new AtomicInteger();
+	private TcpClientMultiplexer multiplexer;
 	private ExecutorService service = Executors.newCachedThreadPool();
 
 	public void processTrans() throws Exception {
-
 		sendTransaction(PostPackagerRND.getSignInMsg());
 		sleep(10000);
-
 		sendTransaction(PostPackagerRND.getPinWorkingKey());
-
 		Runnable echoTask = () -> {
 			while (true) {
 				try {
@@ -50,7 +42,6 @@ public class Application {
 		};
 		service.execute(echoTask);
 		sleep(Integer.MAX_VALUE);
-
 	}
 
 	public void sleep(int millis) {
@@ -71,21 +62,11 @@ public class Application {
 		reqByteBuf.writeByte(len);
 		reqByteBuf.writeBytes(isoByteBuf);
 		try {
-			ByteBuf resByteBuf = multiplexer.processTransaction(reqByteBuf, 40000);
-			if (resByteBuf != null && resByteBuf.isReadable()) {
-				success.getAndAdd(1);
-				ISOMsg respIsoMsg = new ISOMsg();
-				GenericPackager packager = new GenericPackager("jar:postpack.xml");
-				respIsoMsg.setPackager(packager);
-				byte[] dstArray = new byte[resByteBuf.readableBytes()];
-				resByteBuf.readBytes(dstArray);
-				respIsoMsg.unpack(dstArray);
-				respIsoMsg.dump(System.out, "");
-			}
+			multiplexer.processTransaction(reqByteBuf, 40000);
 		} catch (Exception e) {
-			e.printStackTrace();
-			error.getAndAdd(1);
+			System.out.println("exception in sending request");
 		}
+
 	};
 
 	@Bean

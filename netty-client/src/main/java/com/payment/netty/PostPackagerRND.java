@@ -401,7 +401,7 @@ public class PostPackagerRND {
 		reqIsoMsg.set(12, dateTime.format(DateTimeFormatter.ofPattern("HHmmss")));
 		reqIsoMsg.set(13, dateTime.format(DateTimeFormatter.ofPattern("MMdd")));
 		reqIsoMsg.set(70, "301");
-		reqIsoMsg.dump(System.out, "");
+		reqIsoMsg.dump(System.out, "outgoing");
 		return reqIsoMsg.pack();
 	}
 
@@ -418,7 +418,7 @@ public class PostPackagerRND {
 		reqIsoMsg.set(13, dateTime.format(DateTimeFormatter.ofPattern("MMdd")));
 		reqIsoMsg.set(70, "101");
 		reqIsoMsg.set(125, "5DCE17F354FD1CA84791C213BC1B05BFFD031D");
-		reqIsoMsg.dump(System.out, "");
+		reqIsoMsg.dump(System.out, "outgoing");
 		return reqIsoMsg.pack();
 	}
 
@@ -433,7 +433,7 @@ public class PostPackagerRND {
 		reqIsoMsg.set(12, dateTime.format(DateTimeFormatter.ofPattern("HHmmss")));
 		reqIsoMsg.set(13, dateTime.format(DateTimeFormatter.ofPattern("MMdd")));
 		reqIsoMsg.set(70, "001");
-		reqIsoMsg.dump(System.out, "");
+		reqIsoMsg.dump(System.out, "outgoing");
 		return reqIsoMsg.pack();
 	}
 

@@ -3,7 +3,7 @@ package com.payment.tcp.client;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import com.payment.tcp.client.eventgroup.EventLoopGroupProvider;
 import com.payment.tcp.client.handlers.FinancialTransactionHandler;
@@ -21,7 +21,7 @@ import io.netty.channel.pool.FixedChannelPool;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
 
-@Configuration
+@Component
 public class TcpClientMultiplexer {
 	private ChannelPool channelPool;
 	@Autowired
@@ -100,7 +100,6 @@ public class TcpClientMultiplexer {
 			System.out.println("channel connected " + ch.id());
 			ch.pipeline().addLast(new LengthBasedDecoder());
 			ch.pipeline().addLast(new FinancialTransactionHandler());
-
 		}
 	}
 }
