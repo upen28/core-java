@@ -9,6 +9,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.handler.ssl.SslHandshakeCompletionEvent;
 
 public class LengthBasedDecoder extends ByteToMessageDecoder {
 
@@ -18,6 +19,21 @@ public class LengthBasedDecoder extends ByteToMessageDecoder {
 		if (decodeByteBuf != null) {
 			out.add(decodeByteBuf);
 		}
+	}
+
+	@Override
+	public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+		if (evt instanceof SslHandshakeCompletionEvent) {
+			SslHandshakeCompletionEvent event = (SslHandshakeCompletionEvent) evt;
+			if (event.isSuccess()) {
+				System.out.println("ssl success " + ctx.pipeline().channel().localAddress());
+			} else {
+				System.out.println("ssl failure " + ctx.pipeline().channel().localAddress());
+				event.cause().printStackTrace();
+			}
+			ctx.fireUserEventTriggered(evt);
+		}
+
 	}
 
 	private Object decode(ChannelHandlerContext ctx, ByteBuf byteBuf) {

@@ -626,11 +626,29 @@
       length="999"
       name="RESERVED PRIVATE USE"
       class="org.jpos.iso.IFA_LLLCHAR"/>
-  <isofield
+  <!-- <isofield
       id="123"
       length="999"
       name="RESERVED PRIVATE USE"
-      class="org.jpos.iso.IFA_LLLCHAR"/>
+      class="org.jpos.iso.IFA_LLLCHAR"/> -->
+      
+    <isofieldpackager id="123" length="999" name="RESERVED PRIVATE USE" class="org.jpos.iso.IFA_LLLCHAR" packager="org.jpos.iso.packager.GenericSubFieldPackager" emitBitmap="false">
+  	<isofield id="1" length="1" name="Card data input capability" class="org.jpos.iso.IF_CHAR" />
+  	<isofield id="2" length="1" name="Cardholder authentication capability" class="org.jpos.iso.IF_CHAR" />
+  	<isofield id="3" length="1" name="Card capture capability" class="org.jpos.iso.IF_CHAR" />
+  	<isofield id="4" length="1" name="Operating environment" class="org.jpos.iso.IF_CHAR" />
+  	<isofield id="5" length="1" name="Cardholder is present" class="org.jpos.iso.IF_CHAR" />
+  	<isofield id="6" length="1" name="Card is present" class="org.jpos.iso.IF_CHAR" />
+  	<isofield id="7" length="1" name="Card data input mode" class="org.jpos.iso.IF_CHAR" />
+  	<isofield id="8" length="1" name="Cardholder authentication method" class="org.jpos.iso.IF_CHAR" />
+  	<isofield id="9" length="1" name="Cardholder authentication entity" class="org.jpos.iso.IF_CHAR" />
+  	<isofield id="10" length="1" name="Card data output capability" class="org.jpos.iso.IF_CHAR" />
+  	<isofield id="11" length="1" name="Terminal output capability" class="org.jpos.iso.IF_CHAR" />
+  	<isofield id="12" length="1" name="PIN capture capability" class="org.jpos.iso.IF_CHAR" />
+  	<isofield id="13" length="1" name="Terminal operator" class="org.jpos.iso.IF_CHAR" />
+  	<isofield id="14" length="2" name="Terminal type" class="org.jpos.iso.IF_CHAR" />
+  </isofieldpackager>
+  
   <isofield
       id="124"
       length="999"
@@ -784,7 +802,7 @@
           name="ICC DATA"
           class="org.jpos.iso.IFA_LLLLCHAR"/> -->
 	  <isofieldpackager id="25" length="8000" name="ICC DATA" class="org.jpos.iso.IFA_LLLLCHAR" packager="org.jpos.iso.packager.GenericSubFieldPackager">
-	       <isofield id="1" length="8" name="BIT MAP" class="org.jpos.iso.IFB_BITMAP"/>
+	       <isofield id="1" length="8" name="BIT MAP" class="org.jpos.iso.IFA_BITMAP"/>
 	       <isofield id="2" length="12" name="Amount Authorized" class="org.jpos.iso.IFA_NUMERIC"/>
 	       <isofield id="3" length="12" name="Amount Other" class="org.jpos.iso.IFA_NUMERIC"/>
 	       <isofield id="4" length="32" name="Application Identifier" class="org.jpos.iso.IFA_LLCHAR"/>

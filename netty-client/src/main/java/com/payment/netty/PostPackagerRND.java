@@ -129,7 +129,7 @@ public class PostPackagerRND {
 		_127Msg.set(_1271_25Msg);
 		_1271_25Msg.set(31, "8323708DAB52AF473030");
 
-		msg.dump(System.out, "outgoing");
+		msg.dump(System.out, "-->");
 		return msg;
 	}
 

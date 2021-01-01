@@ -2,3 +2,8 @@ dependencies{
 	compile group: 'io.netty', name: 'netty-all', version: '4.1.52.Final'
 	compile group: 'org.jpos', name: 'jpos', version: '2.1.4'
 }
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+springBoot {
+	mainClassName = 'com.payment.tcp.client.Application'
+}

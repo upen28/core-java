@@ -32,6 +32,15 @@ public class TcpClientMultiplexer {
 		configuredConnnectionPool();
 	}
 
+	public void createConnection() throws Exception {
+		Future<Channel> promise = channelPool.acquire().await();
+		if (promise.isSuccess()) {
+			System.out.println("acquiring channel " + Thread.currentThread().getName());
+		} else {
+			throw new Exception("channelpool is busy please try some time later", promise.cause());
+		}
+	}
+
 	public ByteBuf processTransaction(ByteBuf buf, long timeout) throws Exception {
 		Future<Channel> promise = channelPool.acquire().await();
 		if (promise.isSuccess()) {
@@ -97,7 +106,17 @@ public class TcpClientMultiplexer {
 
 		@Override
 		public void channelCreated(Channel ch) throws Exception {
-			System.out.println("channel connected " + ch.id());
+			/*
+			 * List<String> ls = new ArrayList<String>();
+			 * ls.add("TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384");
+			 * 
+			 * SslContext cont2 =
+			 * SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.
+			 * INSTANCE) .ciphers(ls).build(); SSLEngine engine =
+			 * cont2.newEngine(ch.alloc()); engine.setEnabledProtocols(new String[] {
+			 * "TLSv1.2" }); SslHandler sslHandler = new SslHandler(engine, false);
+			 * ch.pipeline().addLast("ssl", sslHandler);
+			 */
 			ch.pipeline().addLast(new LengthBasedDecoder());
 			ch.pipeline().addLast(new FinancialTransactionHandler());
 		}
