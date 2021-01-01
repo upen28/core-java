@@ -8,5 +8,5 @@ dependencies{
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 springBoot {
-	mainClassName = 'com.payment.io.tcp.NedbankTcpServer'
+	mainClassName = 'com.payment.io.tcp.TestTcpServer'
 }

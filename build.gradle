@@ -20,7 +20,6 @@ subprojects{
 }
 dependencies {
 	implementation group: 'org.jpos', name: 'jpos', version: '2.1.4'
-	implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.20'
 }
 springBoot {
 	mainClassName = 'com.payment.tcp.client.Application'
