@@ -9,7 +9,7 @@ public class ResourceAsStreamDemo {
 	public static void main(String... args) {
 		InputStream stream = null;
 		try {
-			stream = ResourceAsStreamDemo.class.getResourceAsStream("/keystore.jks");
+			 stream = ResourceAsStreamDemo.class.getResourceAsStream("/keystore.jks");
 			if (stream != null) {
 				System.out.println("resource loaded successfully");
 			} else {
