@@ -263,7 +263,7 @@ public class TransactionHandlerMasterCard {
 		reqIsoMsg.set(26, "12");
 
 		reqIsoMsg.set(32, "47689550000");
-		reqIsoMsg.set(35, "5387565376885327D230422001003490");
+		reqIsoMsg.set(35, "5387565376885327D230422001003490FFFFF");
 		reqIsoMsg.set(37, genertaeRrn());
 		reqIsoMsg.set(40, "220");
 		reqIsoMsg.set(41, "00000001");

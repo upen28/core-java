@@ -82,7 +82,7 @@ public class PinUtil {
 		}
 
 		byte[] zmkDecp = ISOUtil.hex2byte("13AED5DA1F323475333333C11F2608FD");
-		byte[] zpkEnc = ISOUtil.hex2byte("A76F8DAD29DC1E2B3F5A4591266A2460");
+		byte[] zpkEnc = ISOUtil.hex2byte("F8FAFB04FFA20FB5D5EACF28121752B0");
 
 		SecretKey zmk = defineKey(zmkDecp);
 
@@ -90,20 +90,27 @@ public class PinUtil {
 		SecretKey zpk = defineKey(zpkDec);
 		System.out.println("zpk " + ISOUtil.byte2hex(zpk.getEncoded()));
 
-		byte[] pinBlock = encodePinBlockInFormat0("65300", "4606120300000342");
+		byte[] pinBlock = encodePinBlockInFormat0("5327", "5387565376885327");
 		System.out.println("pin block " + ISOUtil.hexString(pinBlock));
 
-		byte[][] encResult = cbcEncrypt(zpk, pinBlock);
-		System.out.println("enc pin block " + ISOUtil.hexString(encResult[1]));
-		System.out.println("ivparameter " + ISOUtil.hexString(encResult[0]));
+		byte[] encResult = ecbEncrypt(zpk, pinBlock);
+		System.out.println("enc pin block " + ISOUtil.hexString(encResult));
+		
+		
 
-		byte[] encPinBlockFromHSM = ecbDecrypt(zpk, ISOUtil.hex2byte("F5DF27E28AD64D1D"));
-		System.out.println("dec pin block ecb " + ISOUtil.hexString(encPinBlockFromHSM));
+		zmk = new SecretKeySpec(ISOUtil.hex2byte("13AED5DA1F323475333333C11F2608FD"), "DESede");
+		Cipher desCipher = Cipher.getInstance("DESede/ECB/NoPadding");
+		desCipher.init(Cipher.DECRYPT_MODE, zmk);
+		String clearZPK = ISOUtil.hexString(desCipher.doFinal(ISOUtil.hex2byte("F8FAFB04FFA20FB5D5EACF28121752B0")));
+		System.out.println("Clear ZPK:" + clearZPK);
 
-		byte[] encPinBlockFromHSMCBC = cbcDecrypt(zpk, new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 },
-				ISOUtil.hex2byte("F5DF27E28AD64D1D"));
-		System.out.println("dec pin block cbc " + ISOUtil.hexString(encPinBlockFromHSMCBC));
-
+		// Doing the same thing as we did for 3 part ZMK.
+		String clearZPKtripleLength = clearZPK.substring(0, 16) + clearZPK.substring(16, 32)
+				+ clearZPK.substring(0, 16);
+		// Encrypt the pinblock with the clear ZPK
+		zpk = new SecretKeySpec(ISOUtil.hex2byte(clearZPKtripleLength), "DESede");
+		desCipher.init(Cipher.ENCRYPT_MODE, zpk);
+		String encryptedPinBlock = ISOUtil.hexString(desCipher.doFinal(ISOUtil.hex2byte("0453529AC8977ACD")));
+		System.out.println("Encrypted Pin Block :" + encryptedPinBlock);
 	}
-
 }
